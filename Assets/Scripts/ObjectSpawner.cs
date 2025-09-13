@@ -40,9 +40,13 @@ public class ObjectSpawner : MonoBehaviour
 
     IEnumerator SpawnLoop()
     {
-        while (GameManager.Instance != null && !GameManager.isGameOver)
+        while (GameManager.Instance == null)
+            yield return null;
+
+        while (!GameManager.isGameOver)
         {
             yield return new WaitForSeconds(spawnInterval);
+
             if (GameManager.isGameOver) break;
 
             if (Random.value > 0.5f) SpawnCollectible();
@@ -60,7 +64,7 @@ public class ObjectSpawner : MonoBehaviour
             rotationSpeed = collectibleRotationSpeed
         };
 
-        Vector2 spawnPosition = new Vector2(Random.value > 0.5f ? -8f : 8f, Random.Range(minY, maxY));
+        Vector2 spawnPosition = new Vector2(Random.value > 0.5f ? -5f : 5f, Random.Range(minY, maxY));
         GameObject collectible = Instantiate(spawnable.prefab, spawnPosition, Quaternion.identity);
         collectible.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(spawnPosition.x > 0 ? -2f : 2f, 0f);
         collectible.GetComponent<Rigidbody2D>().angularVelocity = spawnable.rotationSpeed * (Random.value > 0.5f ? 1f : -1f);
@@ -74,7 +78,7 @@ public class ObjectSpawner : MonoBehaviour
             rotationSpeed = obstacleRotationSpeed
         };
 
-        Vector2 spawnPosition = new Vector2(Random.value > 0.5f ? -8f : 8f, Random.Range(minY, maxY));
+        Vector2 spawnPosition = new Vector2(Random.value > 0.5f ? -5f : 5f, Random.Range(minY, maxY));
         GameObject obstacle = Instantiate(spawnable.prefab, spawnPosition, Quaternion.identity);
         obstacle.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(spawnPosition.x > 0 ? -2f : 2f, 0f);
         obstacle.GetComponent<Rigidbody2D>().angularVelocity = spawnable.rotationSpeed * (Random.value > 0.5f ? 1f : -1f);

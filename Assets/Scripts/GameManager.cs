@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
             highScoreData.LoadHighScore();
         }
     }
-
+    
     public void AddScore(int points)
     {
         score += points;

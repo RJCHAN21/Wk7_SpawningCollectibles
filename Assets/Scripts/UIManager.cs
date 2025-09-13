@@ -98,11 +98,29 @@ public class UIManager : MonoBehaviour
         if (gm != null)
         {
             gm.OnScoreChanged -= UpdateScore;
-            gm.OnIsGameOver -= ShowGameOverScreen;
+            gm.OnIsGameOver  -= ShowGameOverScreen;
         }
 
         if (_fadeRoutine != null) StopCoroutine(_fadeRoutine);
+        if (_revertTextRoutine != null) StopCoroutine(_revertTextRoutine);
         _fadeRoutine = null;
+        _revertTextRoutine = null;
+
+        if (restartButton)
+        {
+            var btn = restartButton.GetComponent<Button>();
+            if (btn) btn.onClick.RemoveAllListeners();
+        }
+        if (quitButton)
+        {
+            var btn = quitButton.GetComponent<Button>();
+            if (btn) btn.onClick.RemoveAllListeners();
+        }
+        if (resetHighScoreButton)
+        {
+            var btn = resetHighScoreButton.GetComponent<Button>();
+            if (btn) btn.onClick.RemoveAllListeners();
+        }
     }
 
     void Start()
@@ -110,6 +128,11 @@ public class UIManager : MonoBehaviour
         var gm = GameManager.Instance;
         if (gm != null && ScoreText != null)
             ScoreText.text = gm.score.ToString();
+    }
+
+    void OnDestroy()
+    {
+        OnDisable();
     }
 
     void UpdateScore()
